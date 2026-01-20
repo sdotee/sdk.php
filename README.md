@@ -15,6 +15,8 @@ Install via Composer:
 composer require sdotee/see-php-sdk
 ```
 
+or visit: https://packagist.org/packages/sdotee/see-php-sdk for more details.
+
 ## Usage
 
 ### Initialization
