@@ -1,5 +1,5 @@
 {
-  "name": "sdotee/see-php-sdk",
+  "name": "see/sdk",
   "description": "PHP SDK for S.EE API",
   "type": "library",
   "license": "MIT",
@@ -7,6 +7,10 @@
     {
       "name": "S.EE",
       "email": "support@s.ee"
+    },
+    {
+      "name": "S.EE Development Team",
+      "email": "dev@s.ee"
     }
   ],
   "require": {
