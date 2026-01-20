@@ -12,10 +12,10 @@ Official PHP SDK for [S.EE](https://s.ee) API, providing easy access to URL shor
 Install via Composer:
 
 ```bash
-composer require sdotee/see-php-sdk
+composer require sdotee/sdk
 ```
 
-or visit: https://packagist.org/packages/sdotee/see-php-sdk for more details.
+or visit: https://packagist.org/packages/sdotee/sdk for more details.
 
 ## Usage
 
