@@ -1,6 +1,6 @@
 # S.EE PHP SDK
 
-Official PHP SDK for [S.EE](https://s.ee) API.
+Official PHP SDK for [S.EE](https://s.ee) API, providing easy access to URL shortening, text pasting, and file services.
 
 ## Requirements
 
@@ -36,7 +36,7 @@ try {
         'custom_slug' => 'myshort',
         'title' => 'My Link'
     ]);
-    
+
     echo "Short URL: " . $result['short_url'];
 } catch (\See\Exception\SeeException $e) {
     echo "Error: " . $e->getMessage();
@@ -65,6 +65,18 @@ $result = $client->text->create('Hello World!', [
     'title' => 'My Note'
 ]);
 echo $result['short_url'];
+```
+
+**Update Text Paste:**
+
+```php
+$client->text->update('s.ee', 'myslug', 'New Content', 'New Title');
+```
+
+**Delete Text Paste:**
+
+```php
+$client->text->delete('s.ee', 'myslug');
 ```
 
 ### File Service
@@ -129,10 +141,25 @@ php examples/file.php
 
 ## Testing
 
-Run unit tests:
+The project includes PHPUnit tests for each service module (`ShortUrl`, `Text`, `File`).
+
+Run all unit tests:
 
 ```bash
 ./vendor/bin/phpunit
+```
+
+Run tests for a specific module:
+
+```bash
+# Test Short URL service
+./vendor/bin/phpunit tests/ShortUrlTest.php
+
+# Test Text service
+./vendor/bin/phpunit tests/TextTest.php
+
+# Test File service
+./vendor/bin/phpunit tests/FileTest.php
 ```
 
 ## License

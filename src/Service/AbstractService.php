@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: AbstractService.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:52:21
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:22:42
+ *
+ **/
+
 namespace See\Service;
 
 use GuzzleHttp\ClientInterface;
@@ -9,9 +24,7 @@ use See\Exception\SeeException;
 
 abstract class AbstractService
 {
-    public function __construct(protected ClientInterface $httpClient)
-    {
-    }
+    public function __construct(protected ClientInterface $httpClient) {}
 
     /**
      * @param ResponseInterface $response
@@ -27,8 +40,12 @@ abstract class AbstractService
             throw new SeeException('Failed to decode JSON response: ' . $body);
         }
 
+        if (!is_array($data)) {
+            throw new SeeException('Invalid response data format: ' . $body);
+        }
+
         $code = $data['code'] ?? null;
-        
+
         // Normalize code to int if possible for check
         $numericCode = is_numeric($code) ? (int)$code : $code;
 

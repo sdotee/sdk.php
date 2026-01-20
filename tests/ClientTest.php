@@ -1,110 +1,30 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: ClientTest.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 18:14:55
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:23:45
+ *
+ **/
+
 namespace See\Tests;
 
-use GuzzleHttp\Client as GuzzleClient;
-use GuzzleHttp\Handler\MockHandler;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use PHPUnit\Framework\TestCase;
-use See\Client;
 use See\Exception\SeeException;
 
-class ClientTest extends TestCase
+class ClientTest extends BaseTestCase
 {
-    private function createMockClient(array $queue): Client
-    {
-        $mock = new MockHandler($queue);
-        $handlerStack = HandlerStack::create($mock);
-        $httpClient = new GuzzleClient(['handler' => $handlerStack]);
-
-        return new Client('fake_key', 'https://api.test', $httpClient);
-    }
-
-    public function testShortenCreate()
-    {
-        $mockBody = json_encode([
-            'code' => 200,
-            'message' => 'success',
-            'data' => [
-                'short_url' => 'https://s.ee/abc',
-                'slug' => 'abc',
-                'custom_slug' => ''
-            ]
-        ]);
-
-        $client = $this->createMockClient([
-            new Response(200, [], $mockBody)
-        ]);
-
-        $result = $client->shortUrl->create('https://google.com', 's.ee');
-
-        $this->assertIsArray($result);
-        $this->assertEquals('abc', $result['slug']);
-    }
-
-    public function testTextCreate()
-    {
-        $mockBody = json_encode([
-            'code' => 200,
-            'message' => 'success',
-            'data' => [
-                'short_url' => 'https://s.ee/txt',
-                'slug' => 'txt'
-            ]
-        ]);
-
-        $client = $this->createMockClient([
-            new Response(200, [], $mockBody)
-        ]);
-
-        $result = $client->text->create('Hello World');
-
-        $this->assertEquals('https://s.ee/txt', $result['short_url']);
-    }
-
-    public function testFileUpload()
-    {
-        $mockBody = json_encode([
-            'code' => 200,
-            'message' => 'success',
-            'data' => [
-                'url' => 'https://s.ee/image.png',
-                'filename' => 'test.png',
-                'size' => 1024
-            ]
-        ]);
-
-        $client = $this->createMockClient([
-            new Response(200, [], $mockBody)
-        ]);
-
-        // Mocking file upload is strictly about seeing if request is sent,
-        // but here we just check if response is handled.
-        // pass a string content to avoid file read issues in test
-        $result = $client->file->upload('dummy content', 'test.png');
-
-        $this->assertEquals('test.png', $result['filename']);
-    }
-
-    public function testFileDelete()
-    {
-        $mockBody = json_encode([
-            'code' => "200",
-            'message' => 'success',
-            'success' => true
-        ]);
-
-        $client = $this->createMockClient([
-            new Response(200, [], $mockBody)
-        ]);
-
-        $result = $client->file->delete('del_key_123');
-
-        $this->assertArrayHasKey('success', $result);
-        $this->assertTrue($result['success']);
-    }
-
+    /**
+     * Test fetching available domains (Common service).
+     */
     public function testCommonDomains()
     {
         $mockBody = json_encode([
@@ -124,6 +44,9 @@ class ClientTest extends TestCase
         $this->assertEquals('s.ee', $domains[0]);
     }
 
+    /**
+     * Test exception handling for API errors.
+     */
     public function testExceptionHandling()
     {
         $mockBody = json_encode([
@@ -133,7 +56,7 @@ class ClientTest extends TestCase
         ]);
 
         $client = $this->createMockClient([
-            new Response(200, [], $mockBody) // API returns 200 HTTP usually but checks body code
+            new Response(200, [], $mockBody)
         ]);
 
         $this->expectException(SeeException::class);

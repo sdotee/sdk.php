@@ -1,5 +1,21 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: File.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:53:25
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:22:55
+ *
+ **/
+
+
 namespace See\Service;
 
 use See\Exception\SeeException;
@@ -20,8 +36,8 @@ class File extends AbstractService
             'multipart' => [
                 [
                     'name'     => 'file',
-                    'contents' => (is_string($fileContent) && file_exists($fileContent)) 
-                        ? fopen($fileContent, 'r') 
+                    'contents' => (is_string($fileContent) && file_exists($fileContent))
+                        ? fopen($fileContent, 'r')
                         : $fileContent,
                     'filename' => $filename,
                 ],
@@ -44,32 +60,6 @@ class File extends AbstractService
      */
     public function delete(string $hashKey): array
     {
-        // This endpoint returns 'success' boolean field inside JSON, we should probably check it.
-        // Base AbstractService::handleResponse returns the 'data' part if present?
-        // Wait, DELETE response in doc: code, message, success (bool). No data field shown?
-        // Let's check `AbstractService::handleResponse` again.
-        // If data field is absent, it returns null.
-        // But the delete response structure is non-standard compared to others (data field missing?).
-        // Doc says:
-        /*
-            | code | string | 状态码 (注意此处定义为 string) |
-            | message | string | 响应消息 |
-            | success | bool | 是否成功 |
-        */
-        // I might need to override request or handleResponse for this one, or adjust handleResponse to return whole body if data missing?
-        
-        // Let's peek at CommonService requirements too before fixing AbstractService.
-
-        // I'll define a specialized method here to call request but maybe I need to tweak AbstractService to return the full response if needed, OR just trust 'data' is where meaningful stuff is.
-        // But here 'success' is at top level.
-        
-        // I'll call `request` but raw? No, `request` calls `handleResponse`.
-        // I should modify `handleResponse` or `delete` method here.
-        
-        // Let's modify `delete` to handle the specific response if I can.
-        // But `request` is protected and does everything.
-        // I'll add a parameter to `request` to return raw response? Or just modify `handleResponse` to be smarter.
-        
         return $this->request('GET', "file/delete/" . $hashKey);
     }
 

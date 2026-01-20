@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: text.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:58:55
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:21:34
+ *
+ **/
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use See\Client;
@@ -45,7 +60,7 @@ try {
     // Recover domain used from result if not returned? Result has slug, custom_slug, short_url.
     // We should probably know the domain from `short_url` or the one we passed.
     // To update/delete we need domain and slug.
-    // If we didn't pass domain, we might need to parse it from short_url or assume default. 
+    // If we didn't pass domain, we might need to parse it from short_url or assume default.
     // To be safe for the example, let's assume the domain we fetched is used.
 
     // Parse domain from short_url for update/delete if we didn't force one?

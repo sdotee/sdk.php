@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: file.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:59:04
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:21:42
+ *
+ **/
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use See\Client;
@@ -32,10 +47,10 @@ try {
     // 2. Upload File
     echo "2. Uploading file...\n";
     $result = $client->file->upload($tmpFile, $filename);
-    
+
     $fileUrl = $result['url'];
     $hashKey = $result['hash'];
-    
+
     echo "Uploaded: {$fileUrl}\n";
     echo "Delete Key: {$hashKey}\n\n";
 
@@ -45,14 +60,13 @@ try {
     // Depending on what delete returns, it might be the raw response or data
     // The previous implementation was: return $this->request('GET', "file/delete/" . $deleteKey);
     // And handleResponse returns data['data'] ?? $data.
-    
+
     // Check if success
     if (isset($deleteResult['success']) && $deleteResult['success']) {
-         echo "Deleted successfully.\n";
+        echo "Deleted successfully.\n";
     } else {
-         echo "Delete response: " . json_encode($deleteResult) . "\n";
+        echo "Delete response: " . json_encode($deleteResult) . "\n";
     }
-
 } catch (SeeException $e) {
     echo "Error: " . $e->getMessage() . "\n";
     echo "Code: " . $e->getCode() . "\n";

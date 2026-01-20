@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: Client.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:52:27
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:18:24
+ */
+
 namespace See;
 
 use GuzzleHttp\Client as GuzzleClient;
@@ -28,7 +42,7 @@ class Client
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ],
-            'http_errors' => false, 
+            'http_errors' => false,
         ]);
 
         $this->common = new Common($this->httpClient);

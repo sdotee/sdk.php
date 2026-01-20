@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: Text.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:53:12
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:23:08
+ *
+ **/
+
 namespace See\Service;
 
 use See\Exception\SeeException;
@@ -11,13 +26,13 @@ class Text extends AbstractService
      *
      * @param string $content
      * @param array $options Optional parameters:
-     *  - domain (string)
-     *  - custom_slug (string)
-     *  - title (string)
-     *  - text_type (string) e.g., "plain", "markdown"
-     *  - password (string)
-     *  - expire_at (int64)
-     *  - tag_ids (array<int64>)
+     * - domain (string)
+     * - custom_slug (string)
+     * - title (string)
+     * - text_type (string) e.g., "plain", "markdown"
+     * - password (string)
+     * - expire_at (int64)
+     * - tag_ids (array<int64>)
      * @return array
      * @throws SeeException
      */
@@ -49,7 +64,7 @@ class Text extends AbstractService
             'slug' => $slug,
             'content' => $content,
         ];
-        
+
         if ($title !== null) {
             $payload['title'] = $title;
         }

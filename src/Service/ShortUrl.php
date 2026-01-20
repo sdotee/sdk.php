@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: ShortUrl.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:53:03
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:23:02
+ *
+ **/
+
 namespace See\Service;
 
 use See\Exception\SeeException;
@@ -12,12 +27,12 @@ class ShortUrl extends AbstractService
      * @param string $targetUrl
      * @param string $domain
      * @param array $options Optional parameters:
-     *  - custom_slug (string)
-     *  - title (string)
-     *  - password (string)
-     *  - expire_at (int64)
-     *  - expiration_redirect_url (string)
-     *  - tag_ids (array<int64>)
+     * - custom_slug (string)
+     * - title (string)
+     * - password (string)
+     * - expire_at (int64)
+     * - expiration_redirect_url (string)
+     * - tag_ids (array<int64>)
      * @return array
      * @throws SeeException
      */
@@ -30,7 +45,7 @@ class ShortUrl extends AbstractService
 
         // Filter out null values to avoid sending them? API might accept nulls, but usually optional fields are omitted.
         // Let's rely on array_merge and user passing needed options.
-        
+
         return $this->request('POST', 'shorten', [
             'json' => $payload,
         ]);

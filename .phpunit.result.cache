@@ -1,0 +1,1 @@
+{"version":2,"defects":[],"times":{"See\\Tests\\ClientTest::testCommonDomains":0.013,"See\\Tests\\ClientTest::testExceptionHandling":0.001,"See\\Tests\\FileTest::testFileUpload":0.001,"See\\Tests\\FileTest::testFileDelete":0,"See\\Tests\\ShortUrlTest::testShortenCreate":0,"See\\Tests\\TextTest::testTextCreate":0}}

@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Copyright (c) 2026 S.EE Development Team
+ *
+ * This source code is licensed under the MIT License,
+ * which is located in the LICENSE file in the source tree's root directory.
+ *
+ * File: url.php
+ * Author: S.EE Development Team <dev@s.ee>
+ * File Created: 2026-01-20 17:58:44
+ *
+ * Modified By: S.EE Development Team <dev@s.ee>
+ * Last Modified: 2026-01-20 18:19:40
+ **/
+
+
 require __DIR__ . '/../vendor/autoload.php';
 
 use See\Client;
@@ -28,14 +43,14 @@ try {
     // 2. Create a Short URL
     $targetUrl = "https://www.example.com/?t=" . time();
     echo "2. Creating short URL for: {$targetUrl}\n";
-    
+
     $result = $client->shortUrl->create($targetUrl, $domain, [
         'title' => 'Example Link via SDK'
     ]);
-    
+
     $shortUrl = $result['short_url'];
     $slug = $result['slug']; // Save slug for cleanup
-    
+
     echo "Created: {$shortUrl}\n";
     echo "Slug: {$slug}\n\n";
 
@@ -49,7 +64,6 @@ try {
     echo "4. Deleting Short URL...\n";
     $client->shortUrl->delete($domain, $slug);
     echo "Deleted successfully.\n";
-
 } catch (SeeException $e) {
     echo "Error: " . $e->getMessage() . "\n";
     echo "Code: " . $e->getCode() . "\n";
