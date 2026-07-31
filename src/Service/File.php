@@ -120,7 +120,7 @@ class File extends AbstractService
             'headers' => [
                 'Content-Type' => 'application/offset+octet-stream',
                 'Tus-Resumable' => '1.0.0',
-                'Upload-Offset' => $offset,
+                'Upload-Offset' => (string) $offset,
             ],
         ]);
         $this->handleResponse($response);

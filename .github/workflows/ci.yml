@@ -59,6 +59,30 @@ jobs:
       - name: Run tests
         run: composer test
 
+  guzzle-compatibility:
+    name: Guzzle ${{ matrix.guzzle }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        guzzle: ["^7.8", "^8.0"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+          tools: composer:v2
+
+      - name: Install Guzzle ${{ matrix.guzzle }}
+        run: composer require --no-interaction --no-progress --with-all-dependencies "guzzlehttp/guzzle:${{ matrix.guzzle }}"
+
+      - name: Run tests
+        run: composer test
+
   package-checks:
     name: Package checks
     runs-on: ubuntu-latest
