@@ -1,6 +1,12 @@
 # S.EE PHP SDK
 
+[![CI](https://github.com/sdotee/sdk.php/actions/workflows/ci.yml/badge.svg)](https://github.com/sdotee/sdk.php/actions/workflows/ci.yml)
+[![Latest Stable Version](https://poser.pugx.org/sdotee/sdk/v/stable)](https://packagist.org/packages/sdotee/sdk)
+[![License](https://poser.pugx.org/sdotee/sdk/license)](LICENSE)
+
 Official PHP SDK for the [S.EE](https://s.ee) API. It supports short URLs, text sharing, files (including TUS large-file uploads), bio pages, QR codes, tags, usage, and token validation.
+
+Current SDK version: **1.3.0**. The runtime version is available as `See\Client::VERSION`.
 
 ## Requirements
 
@@ -250,7 +256,7 @@ The project includes request-level PHPUnit tests for the service modules and sha
 Run all unit tests:
 
 ```bash
-./vendor/bin/phpunit
+composer check
 ```
 
 Run tests for a specific module:

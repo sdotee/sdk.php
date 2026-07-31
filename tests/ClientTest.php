@@ -18,10 +18,16 @@
 namespace See\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use See\Client;
 use See\Exception\SeeException;
 
 class ClientTest extends BaseTestCase
 {
+    public function testSdkVersion(): void
+    {
+        $this->assertSame('1.3.0', Client::VERSION);
+    }
+
     /**
      * Test fetching available domains (Common service).
      */

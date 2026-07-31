@@ -30,5 +30,13 @@
     "psr-4": {
       "See\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "test": "phpunit --do-not-cache-result",
+    "check": [
+      "@composer validate --strict",
+      "@composer audit --locked",
+      "@test"
+    ]
   }
 }

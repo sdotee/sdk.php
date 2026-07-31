@@ -27,6 +27,8 @@ use See\Service\Token;
 
 class Client
 {
+    public const VERSION = '1.3.0';
+
     private const BASE_URI = 'https://s.ee/api/v1/';
 
     public Common $common;
