@@ -20,6 +20,7 @@ namespace See\Tests;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use PHPUnit\Framework\TestCase;
 use See\Client;
 
@@ -31,10 +32,12 @@ class BaseTestCase extends TestCase
      * @param array $queue Request/Response queue for the mock handler
      * @return Client
      */
-    protected function createMockClient(array $queue): Client
+    protected function createMockClient(array $queue, ?array &$history = null): Client
     {
         $mock = new MockHandler($queue);
         $handlerStack = HandlerStack::create($mock);
+        $history ??= [];
+        $handlerStack->push(Middleware::history($history));
         $httpClient = new GuzzleClient(['handler' => $handlerStack]);
 
         return new Client('fake_key', 'https://api.test', $httpClient);

@@ -65,4 +65,17 @@ class ClientTest extends BaseTestCase
 
         $client->common->getTags();
     }
+
+    public function testHttpErrorWithoutApiCode(): void
+    {
+        $client = $this->createMockClient([
+            new Response(500, [], json_encode(['message' => 'Server unavailable']))
+        ]);
+
+        $this->expectException(SeeException::class);
+        $this->expectExceptionMessage('Server unavailable');
+        $this->expectExceptionCode(500);
+
+        $client->common->getUsage();
+    }
 }

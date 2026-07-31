@@ -34,10 +34,18 @@ abstract class AbstractService
     protected function handleResponse(ResponseInterface $response): mixed
     {
         $body = (string) $response->getBody();
+
+        if ($body === '' && $response->getStatusCode() >= 200 && $response->getStatusCode() < 300) {
+            return [];
+        }
+
         $data = json_decode($body, true);
 
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new SeeException('Failed to decode JSON response: ' . $body);
+            throw new SeeException(
+                'Failed to decode JSON response: ' . $body,
+                $response->getStatusCode()
+            );
         }
 
         if (!is_array($data)) {
@@ -49,9 +57,9 @@ abstract class AbstractService
         // Normalize code to int if possible for check
         $numericCode = is_numeric($code) ? (int)$code : $code;
 
-        if ($numericCode !== 200 && $numericCode !== 0) {
+        if ($response->getStatusCode() >= 400 || ($code !== null && $numericCode !== 200 && $numericCode !== 0)) {
             $message = $data['message'] ?? 'Unknown error';
-            throw new SeeException($message, (int)$numericCode);
+            throw new SeeException($message, (int)($numericCode ?? $response->getStatusCode()));
         }
 
         return $data['data'] ?? $data;
@@ -66,9 +74,13 @@ abstract class AbstractService
      */
     protected function request(string $method, string $uri, array $options = []): mixed
     {
+        return $this->handleResponse($this->sendRequest($method, $uri, $options));
+    }
+
+    protected function sendRequest(string $method, string $uri, array $options = []): ResponseInterface
+    {
         try {
-            $response = $this->httpClient->request($method, $uri, $options);
-            return $this->handleResponse($response);
+            return $this->httpClient->request($method, $uri, $options);
         } catch (GuzzleException $e) {
             throw new SeeException($e->getMessage(), $e->getCode(), $e);
         }

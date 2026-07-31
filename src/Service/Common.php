@@ -45,4 +45,9 @@ class Common extends AbstractService
         $data = $this->request('GET', 'tags');
         return $data['tags'] ?? [];
     }
+
+    public function getUsage(): array
+    {
+        return $this->request('GET', 'usage');
+    }
 }

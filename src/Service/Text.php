@@ -21,6 +21,12 @@ use See\Exception\SeeException;
 
 class Text extends AbstractService
 {
+    public function getDomains(): array
+    {
+        $data = $this->request('GET', 'text/domains');
+        return $data['domains'] ?? [];
+    }
+
     /**
      * Create a new text paste.
      *
@@ -90,5 +96,10 @@ class Text extends AbstractService
                 'slug' => $slug,
             ],
         ]);
+    }
+
+    public function getHistory(int $page = 1): array
+    {
+        return $this->request('GET', 'texts', ['query' => ['page' => $page]]);
     }
 }

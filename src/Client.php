@@ -17,10 +17,13 @@
 namespace See;
 
 use GuzzleHttp\Client as GuzzleClient;
+use See\Service\BioPage;
 use See\Service\Common;
 use See\Service\File;
+use See\Service\QrCode;
 use See\Service\ShortUrl;
 use See\Service\Text;
+use See\Service\Token;
 
 class Client
 {
@@ -30,6 +33,9 @@ class Client
     public ShortUrl $shortUrl;
     public Text $text;
     public File $file;
+    public BioPage $bioPage;
+    public QrCode $qrCode;
+    public Token $token;
 
     private GuzzleClient $httpClient;
 
@@ -39,7 +45,6 @@ class Client
             'base_uri' => $baseUri,
             'headers' => [
                 'Authorization' => $apiKey,
-                'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ],
             'http_errors' => false,
@@ -49,5 +54,8 @@ class Client
         $this->shortUrl = new ShortUrl($this->httpClient);
         $this->text = new Text($this->httpClient);
         $this->file = new File($this->httpClient);
+        $this->bioPage = new BioPage($this->httpClient);
+        $this->qrCode = new QrCode($this->httpClient);
+        $this->token = new Token($this->httpClient);
     }
 }

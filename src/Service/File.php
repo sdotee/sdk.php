@@ -30,23 +30,35 @@ class File extends AbstractService
      * @return array
      * @throws SeeException
      */
-    public function upload($fileContent, string $filename): array
+    public function upload($fileContent, string $filename, array $fields = []): array
     {
+        if (!is_resource($fileContent) && !is_string($fileContent)) {
+            throw new \InvalidArgumentException('File content must be a path, string content, or resource.');
+        }
+
+        $contents = $fileContent;
+        if (is_string($fileContent) && is_file($fileContent)) {
+            $contents = fopen($fileContent, 'rb');
+        }
+
         $options = [
             'multipart' => [
                 [
                     'name'     => 'file',
-                    'contents' => (is_string($fileContent) && file_exists($fileContent))
-                        ? fopen($fileContent, 'r')
-                        : $fileContent,
+                    'contents' => $contents,
                     'filename' => $filename,
                 ],
-                [
-                    'name'     => 'filename',
-                    'contents' => $filename
-                ]
             ],
         ];
+
+        foreach (['domain', 'custom_slug'] as $name) {
+            if (array_key_exists($name, $fields) && $fields[$name] !== null) {
+                $options['multipart'][] = [
+                    'name' => $name,
+                    'contents' => (string) $fields[$name],
+                ];
+            }
+        }
 
         return $this->request('POST', 'file/upload', $options);
     }
@@ -73,5 +85,90 @@ class File extends AbstractService
     {
         $data = $this->request('GET', 'file/domains');
         return $data['domains'] ?? [];
+    }
+
+    public function getHistory(int $page = 1): array
+    {
+        return $this->request('GET', 'files', ['query' => ['page' => $page]]);
+    }
+
+    public function getPrivateDownloadUrl(int $fileId): array
+    {
+        return $this->request('GET', 'file/private/download-url', [
+            'query' => ['file_id' => $fileId],
+        ]);
+    }
+
+    public function createLargeUpload(string $fileName, int $fileSize, array $options = []): array
+    {
+        return $this->request('POST', 'file/large-file/create', [
+            'json' => array_merge([
+                'file_name' => $fileName,
+                'file_size' => $fileSize,
+            ], $options),
+        ]);
+    }
+
+    public function uploadChunk(string $uploadId, $chunk, int $offset): int
+    {
+        if (!is_resource($chunk) && !is_string($chunk)) {
+            throw new \InvalidArgumentException('Chunk must be string content or a resource.');
+        }
+
+        $response = $this->sendRequest('PATCH', $this->tusUri($uploadId), [
+            'body' => $chunk,
+            'headers' => [
+                'Content-Type' => 'application/offset+octet-stream',
+                'Tus-Resumable' => '1.0.0',
+                'Upload-Offset' => $offset,
+            ],
+        ]);
+        $this->handleResponse($response);
+
+        return (int) $response->getHeaderLine('Upload-Offset');
+    }
+
+    public function getLargeUploadOffset(string $uploadId): int
+    {
+        $response = $this->sendRequest('HEAD', $this->tusUri($uploadId), [
+            'headers' => ['Tus-Resumable' => '1.0.0'],
+        ]);
+        $this->handleResponse($response);
+
+        return (int) $response->getHeaderLine('Upload-Offset');
+    }
+
+    public function terminateLargeUpload(string $uploadId): void
+    {
+        $response = $this->sendRequest('DELETE', $this->tusUri($uploadId), [
+            'headers' => ['Tus-Resumable' => '1.0.0'],
+        ]);
+        $this->handleResponse($response);
+    }
+
+    public function getLargeUploadProgress(string $uploadId): array
+    {
+        return $this->request('GET', 'file/large-file/progress', [
+            'query' => ['upload_id' => $uploadId],
+        ]);
+    }
+
+    public function completeLargeUpload(string $uploadId): array
+    {
+        return $this->request('POST', 'file/large-file/complete', [
+            'json' => ['upload_id' => $uploadId],
+        ]);
+    }
+
+    public function cancelLargeUpload(string $uploadId): mixed
+    {
+        return $this->request('DELETE', 'file/large-file/cancel', [
+            'json' => ['upload_id' => $uploadId],
+        ]);
+    }
+
+    private function tusUri(string $uploadId): string
+    {
+        return 'file/large-file-tus/' . rawurlencode($uploadId);
     }
 }

@@ -21,6 +21,12 @@ use See\Exception\SeeException;
 
 class ShortUrl extends AbstractService
 {
+    public function getDomains(): array
+    {
+        $data = $this->request('GET', 'domains');
+        return $data['domains'] ?? [];
+    }
+
     /**
      * Create a new short URL.
      *
@@ -90,6 +96,29 @@ class ShortUrl extends AbstractService
                 'domain' => $domain,
                 'slug' => $slug,
             ],
+        ]);
+    }
+
+    public function createSimple(string $signature, string $targetUrl, array $options = []): mixed
+    {
+        return $this->request('GET', 'shorten', [
+            'query' => array_merge([
+                'signature' => $signature,
+                'url' => $targetUrl,
+                'json' => true,
+            ], $options),
+        ]);
+    }
+
+    public function getHistory(int $page = 1): array
+    {
+        return $this->request('GET', 'links', ['query' => ['page' => $page]]);
+    }
+
+    public function getVisitStatistics(string $domain, string $slug, string $period = 'totally'): array
+    {
+        return $this->request('GET', 'link/visit-stat', [
+            'query' => compact('domain', 'slug', 'period'),
         ]);
     }
 }
